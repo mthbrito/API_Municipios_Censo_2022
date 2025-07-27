@@ -22,7 +22,7 @@ public class MunicipioService {
     @Autowired
     public MunicipioService(MunicipioRepository municipioRepository) {
         this.municipioRepository = municipioRepository;
-    } e
+    }
 
     public List<MunicipioDTO> getDadosMunicipio() {
         List<Municipio> municipios = municipioRepository.findAll();
