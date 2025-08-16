@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static brito.api_municipios_censo_2022.model.mapper.MunicipioMapper.toDTO;
 import static brito.api_municipios_censo_2022.model.mapper.MunicipioMapper.toGeometryDTO;
@@ -32,10 +33,9 @@ public class MunicipioService {
 
     public MunicipioDTO getDadosById(String id) {
         checarSeEntradaENumeroValido(id);
-        return toDTO(
-                municipioRepository.findById(Integer.parseInt(id))
-                        .orElseThrow(MunicipiosNaoEncontradosException::new)
-        );
+        Municipio municipio = municipioRepository.findById(id);
+        checarSeMunicipioExiste(municipio);
+        return toDTO(municipio);
     }
 
     public List<MunicipioDTO> getDadosByMunicipio(String municipio) {
@@ -64,6 +64,15 @@ public class MunicipioService {
         List<Municipio> municipios = municipioRepository.findByAreaBetween(Integer.parseInt(infLim), Integer.parseInt(supLim));
         checarSeMunicipiosExistem(municipios);
         return toDTO(municipios);
+    }
+
+    public MunicipioGeometryDTO getGeomById(String id) {
+        checarSeEntradaENumeroValido(id);
+        Municipio municipio = municipioRepository.findById(id);
+        if (municipio == null) {
+            throw new MunicipiosNaoEncontradosException();
+        }
+        return toGeometryDTO(municipio);
     }
 
     public List<MunicipioGeometryDTO> getGeomByMunicipio(String municipio) {
@@ -114,6 +123,12 @@ public class MunicipioService {
     private void checarSeEntradaETextoValido(String entrada) {
         if (entrada == null || (!entrada.matches("^[\\p{L}\\s-]+$"))) {
             throw new EntradaInvalidaException();
+        }
+    }
+
+    private void checarSeMunicipioExiste(Municipio municipio) {
+        if (municipio == null) {
+            throw new MunicipiosNaoEncontradosException();
         }
     }
 

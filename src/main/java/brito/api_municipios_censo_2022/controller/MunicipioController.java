@@ -5,13 +5,11 @@ import brito.api_municipios_censo_2022.model.dto.MunicipioGeometryDTO;
 import brito.api_municipios_censo_2022.service.MunicipioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("api/censo2022")
 public class MunicipioController {
@@ -53,6 +51,11 @@ public class MunicipioController {
         return ResponseEntity.ok(municipioService.getDadosByArea(infLim, supLim));
     }
 
+    @GetMapping("geom/id/{id}")
+    public ResponseEntity<MunicipioGeometryDTO> getGeomById(@PathVariable String id) {
+        return ResponseEntity.ok(municipioService.getGeomById(id));
+    }
+
     @GetMapping("geom/municipio/{municipio}")
     public ResponseEntity<List<MunicipioGeometryDTO>> getGeomByMunicipio(@PathVariable String municipio) {
         return ResponseEntity.ok(municipioService.getGeomByMunicipio(municipio));
@@ -72,5 +75,4 @@ public class MunicipioController {
     public ResponseEntity<List<MunicipioGeometryDTO>> getGeomByArea(@PathVariable String infLim, @PathVariable String supLim) {
         return ResponseEntity.ok(municipioService.getGeomByArea(infLim, supLim));
     }
-
 }

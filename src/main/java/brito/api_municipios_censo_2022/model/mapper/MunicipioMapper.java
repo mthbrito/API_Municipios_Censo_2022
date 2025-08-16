@@ -26,7 +26,11 @@ public class MunicipioMapper {
     }
 
     public static MunicipioGeometryDTO toGeometryDTO(Municipio municipio) {
-        return new MunicipioGeometryDTO(municipio.getGeom());
+        return new MunicipioGeometryDTO(
+                municipio.getId(),
+                municipio.getMunicipio(),
+                municipio.getEstado(),
+                municipio.getGeom());
     }
 
     public static List<MunicipioGeometryDTO> toGeometryDTO(List<Municipio> municipios) {
