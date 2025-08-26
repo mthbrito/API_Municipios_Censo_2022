@@ -2,18 +2,12 @@ package brito.api_municipios_censo_2022.service;
 
 import brito.api_municipios_censo_2022.exception.EntradaInvalidaException;
 import brito.api_municipios_censo_2022.exception.MunicipiosNaoEncontradosException;
-import brito.api_municipios_censo_2022.model.dto.MunicipioDTO;
-import brito.api_municipios_censo_2022.model.dto.MunicipioGeometryDTO;
 import brito.api_municipios_censo_2022.model.entity.Municipio;
 import brito.api_municipios_censo_2022.repository.MunicipioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
-import static brito.api_municipios_censo_2022.model.mapper.MunicipioMapper.toDTO;
-import static brito.api_municipios_censo_2022.model.mapper.MunicipioMapper.toGeometryDTO;
 
 @Service
 public class MunicipioService {
@@ -25,82 +19,45 @@ public class MunicipioService {
         this.municipioRepository = municipioRepository;
     }
 
-    public List<MunicipioDTO> getDadosMunicipio() {
+    public List<Municipio> getDadosMunicipios() {
         List<Municipio> municipios = municipioRepository.findAll();
         checarSeMunicipiosExistem(municipios);
-        return toDTO(municipios);
+        return municipios;
     }
 
-    public MunicipioDTO getDadosById(String id) {
+    public Municipio getDadosById(String id) {
         checarSeEntradaENumeroValido(id);
         Municipio municipio = municipioRepository.findById(id);
         checarSeMunicipioExiste(municipio);
-        return toDTO(municipio);
+        return municipio;
     }
 
-    public List<MunicipioDTO> getDadosByMunicipio(String municipio) {
+    public List<Municipio> getDadosByMunicipio(String municipio) {
         checarSeEntradaETextoValido(municipio);
         List<Municipio> municipios = municipioRepository.findByMunicipio(municipio);
         checarSeMunicipiosExistem(municipios);
-        return toDTO(municipios);
+        return municipios;
     }
 
-    public List<MunicipioDTO> getDadosByEstado(String estado) {
+    public List<Municipio> getDadosByEstado(String estado) {
         checarSeEntradaETextoValido(estado);
         List<Municipio> municipios = municipioRepository.findByEstado(estado);
         checarSeMunicipiosExistem(municipios);
-        return toDTO(municipios);
+        return municipios;
     }
 
-    public List<MunicipioDTO> getDadosByPopulacao(String infLim, String supLim) {
+    public List<Municipio> getDadosByPopulacao(String infLim, String supLim) {
         checarSeEntradaENumeroValido(infLim, supLim);
         List<Municipio> municipios = municipioRepository.findByPopulacaoBetween(Integer.parseInt(infLim), Integer.parseInt(supLim));
         checarSeMunicipiosExistem(municipios);
-        return toDTO(municipios);
+        return municipios;
     }
 
-    public List<MunicipioDTO> getDadosByArea(String infLim, String supLim) {
+    public List<Municipio> getDadosByArea(String infLim, String supLim) {
         checarSeEntradaENumeroValido(infLim, supLim);
         List<Municipio> municipios = municipioRepository.findByAreaBetween(Integer.parseInt(infLim), Integer.parseInt(supLim));
         checarSeMunicipiosExistem(municipios);
-        return toDTO(municipios);
-    }
-
-    public MunicipioGeometryDTO getGeomById(String id) {
-        checarSeEntradaENumeroValido(id);
-        Municipio municipio = municipioRepository.findById(id);
-        if (municipio == null) {
-            throw new MunicipiosNaoEncontradosException();
-        }
-        return toGeometryDTO(municipio);
-    }
-
-    public List<MunicipioGeometryDTO> getGeomByMunicipio(String municipio) {
-        checarSeEntradaETextoValido(municipio);
-        List<Municipio> municipios = municipioRepository.findByMunicipio(municipio);
-        checarSeMunicipiosExistem(municipios);
-        return toGeometryDTO(municipios);
-    }
-
-    public List<MunicipioGeometryDTO> getGeomByEstado(String estado) {
-        checarSeEntradaETextoValido(estado);
-        List<Municipio> municipios = municipioRepository.findByEstado(estado);
-        checarSeMunicipiosExistem(municipios);
-        return toGeometryDTO(municipios);
-    }
-
-    public List<MunicipioGeometryDTO> getGeomByPopulacao(String infLim, String supLim) {
-        checarSeEntradaENumeroValido(infLim, supLim);
-        List<Municipio> municipios = municipioRepository.findByPopulacaoBetween(Integer.parseInt(infLim), Integer.parseInt(supLim));
-        checarSeMunicipiosExistem(municipios);
-        return toGeometryDTO(municipios);
-    }
-
-    public List<MunicipioGeometryDTO> getGeomByArea(String infLim, String supLim) {
-        checarSeEntradaENumeroValido(infLim, supLim);
-        List<Municipio> municipios = municipioRepository.findByAreaBetween(Integer.parseInt(infLim), Integer.parseInt(supLim));
-        checarSeMunicipiosExistem(municipios);
-        return toGeometryDTO(municipios);
+        return municipios;
     }
 
     private void checarSeEntradaENumeroValido(String entrada) {

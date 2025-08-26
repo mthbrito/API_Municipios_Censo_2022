@@ -18,4 +18,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<String> municipiosNaoEncontrados(MunicipiosNaoEncontradosException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+    @ExceptionHandler(EstadosNaoEncontradosException.class)
+    private ResponseEntity<String> estadosNaoEncontrados(EstadosNaoEncontradosException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
 }

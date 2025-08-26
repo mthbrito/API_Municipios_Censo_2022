@@ -25,5 +25,4 @@ public interface MunicipioRepository extends JpaRepository<Municipio, Integer> {
     @Query(value = "SELECT id, municipio, estado, populacao, area, ST_AsGeoJSON(geom)::json AS geom FROM municipios_censo2022 WHERE area >= ? AND area <= ?", nativeQuery = true)
     List<Municipio> findByAreaBetween(double infLim, double supLim);
 
-
 }
